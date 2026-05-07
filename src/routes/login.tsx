@@ -3,6 +3,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { store } from "@/lib/store";
 import { toast } from "sonner";
+import emailIcon from "@/assets/Email.svg";
+import lockIcon from "@/assets/Lock.svg";
 
 export const Route = createFileRoute("/login")({
   component: LoginPage,
@@ -32,7 +34,7 @@ function LoginPage() {
           
           <div className="relative">
             <div className="absolute left-4 top-1/2 -translate-y-1/2">
-              <img src="/src/assets/Email.svg" alt="Email" width="24" height="24" />
+              <img src={emailIcon} alt="Email" width="24" height="24" />
             </div>
             <input
               id="email"
@@ -47,7 +49,7 @@ function LoginPage() {
           
           <div className="relative">
             <div className="absolute left-4 top-1/2 -translate-y-1/2">
-              <img src="/src/assets/Lock.svg" alt="Lock" width="24" height="24" />
+              <img src={lockIcon} alt="Lock" width="24" height="24" />
             </div>
             <input
               id="password"
