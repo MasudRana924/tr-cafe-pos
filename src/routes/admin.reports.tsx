@@ -22,7 +22,6 @@ const COLORS = ["var(--chart-1)", "var(--chart-2)", "var(--chart-3)", "var(--cha
 
 function ReportsPage() {
   const orders = useStore((s) => s.orders);
-
   const monthly = useMemo(() => {
     const map = new Map<string, number>();
     orders.forEach((o) => {
