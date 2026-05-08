@@ -47,6 +47,30 @@ function unwrapSalesSummary(res: any): SalesSummary {
   };
 }
 
+export type SalesHistoryChartRow = { date: string; sales: number };
+
+/** Full `/api/reports/sales-history` parse: `data.sales` KPIs + optional time-series rows if backend sends them. */
+function unwrapSalesHistoryFull(res: any): { summary: SalesSummary; chartRows: SalesHistoryChartRow[] } {
+  const summary = unwrapSalesSummary(res);
+  const d = res?.data;
+  let rowsRaw: any[] = [];
+  if (Array.isArray(d)) {
+    rowsRaw = d;
+  } else if (d && typeof d === "object") {
+    if (Array.isArray(d.history)) rowsRaw = d.history;
+    else if (Array.isArray(d.chart)) rowsRaw = d.chart;
+    else if (Array.isArray(d.rows)) rowsRaw = d.rows;
+    else if (Array.isArray(d.series)) rowsRaw = d.series;
+  }
+  const chartRows: SalesHistoryChartRow[] = rowsRaw
+    .map((r: any) => ({
+      date: String(r?.date ?? r?.day ?? ""),
+      sales: toNumber(r?.sales ?? r?.amount),
+    }))
+    .filter((r) => r.date.length > 0);
+  return { summary, chartRows };
+}
+
 export function useBestSellingQuery(opts?: { refetchOnMount?: "always" | boolean }) {
   return useQuery({
     queryKey: ["reports", "best-selling"],
@@ -70,7 +94,7 @@ export function useSummaryQuery(opts?: { refetchOnMount?: "always" | boolean }) 
 export function useSalesHistoryQuery(opts?: { refetchOnMount?: "always" | boolean }) {
   return useQuery({
     queryKey: ["reports", "sales-history"],
-    queryFn: async () => unwrapSalesSummary(await reportsApi.salesHistory()),
+    queryFn: async () => unwrapSalesHistoryFull(await reportsApi.salesHistory()),
     staleTime: 0,
     refetchOnMount: opts?.refetchOnMount ?? true,
     refetchOnWindowFocus: false,

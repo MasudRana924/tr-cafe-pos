@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { ShoppingCart, Receipt, History, BarChart3 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { ensureAuthed } from "@/lib/requireAuth";
+import { getSalesmanNavItems } from "@/lib/shell-nav";
 
 export const Route = createFileRoute("/pos")({
   beforeLoad: async () => {
@@ -13,15 +13,7 @@ export const Route = createFileRoute("/pos")({
 
 function SalesmanLayout() {
   return (
-    <AppShell
-      title="Sales Workspace"
-      items={[
-        { to: "/pos", label: "POS", icon: <ShoppingCart className="w-5 h-5" /> },
-        { to: "/pos/orders", label: "Orders", icon: <Receipt className="w-5 h-5" /> },
-        { to: "/pos/history", label: "History", icon: <History className="w-5 h-5" /> },
-        { to: "/sales-report", label: "Sales Report", icon: <BarChart3 className="w-5 h-5" /> },
-      ]}
-    >
+    <AppShell title="Sales Workspace" items={getSalesmanNavItems()}>
       <Outlet />
     </AppShell>
   );
