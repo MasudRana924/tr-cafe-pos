@@ -1,35 +1,63 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { store } from "@/lib/store";
 import { toast } from "sonner";
 import emailIcon from "@/assets/Email.svg";
 import lockIcon from "@/assets/Lock.svg";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useLoginMutation, useMeQuery } from "@/hooks/useAuth";
+import { authStore } from "@/lib/authStore";
 
 export const Route = createFileRoute("/login")({
   component: LoginPage,
 });
 
+const schema = yup.object({
+  email: yup.string().email("Invalid email").required("Email is required"),
+  password: yup.string().required("Password is required"),
+});
+
 function LoginPage() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("admin@canteen.com");
-  const [password, setPassword] = useState("password");
   const [role, setRole] = useState<"admin" | "salesman">("admin");
+  const login = useLoginMutation();
+  useMeQuery(Boolean(authStore.get().token));
 
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !password) return toast.error("Enter email and password");
-    
-    const u = store.login(email, role);
-    if (!u) return toast.error("Invalid credentials. Try the demo accounts shown below.");
-    toast.success(`Welcome, ${u.name}`);
-    navigate({ to: u.role === "admin" ? "/admin" : "/pos" });
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<{ email: string; password: string }>({
+    defaultValues: { email: "admin@example.com", password: "admin123" },
+    resolver: yupResolver(schema),
+  });
+
+  useEffect(() => {
+    // keep the existing "role toggle sets email" UX
+    // (password stays user-controlled)
+  }, []);
+
+  const onSubmit = async (values: { email: string; password: string }) => {
+    try {
+      const res = await login.mutateAsync(values);
+      const token = (res as any)?.data?.token ?? (res as any)?.token;
+      if (!token) return toast.error("Login failed: token missing");
+      const user = (res as any)?.data?.user ?? (res as any)?.user;
+      if (user?.name) toast.success(`Welcome, ${user.name}`);
+      else toast.success("Logged in");
+      navigate({ to: user?.role === "admin" ? "/admin" : "/pos" });
+    } catch (e: any) {
+      toast.error(e?.message ?? "Login failed");
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white">
       <div className="w-full max-w-sm p-6">
-        <form onSubmit={submit} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <h2 className="text-left text-2xl font-bold mb-4">Welcome to TR Cafe POS</h2>
           
           <div className="relative">
@@ -39,12 +67,12 @@ function LoginPage() {
             <input
               id="email"
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              {...register("email")}
               placeholder="Email"
               className="w-full h-[58px] pl-12 pr-4 rounded-[12px] border border-[#F5F5F5] bg-[#F5F5F5] focus:outline-none focus:border-[#F5F5F5]"
               style={{ width: "410px", height: "58px" }}
             />
+            {errors.email?.message && <div className="text-xs text-destructive mt-1">{errors.email.message}</div>}
           </div>
           
           <div className="relative">
@@ -54,12 +82,12 @@ function LoginPage() {
             <input
               id="password"
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              {...register("password")}
               placeholder="Password"
               className="w-full h-[58px] pl-12 pr-4 rounded-[12px] border border-[#F5F5F5] bg-[#F5F5F5] focus:outline-none focus:border-[#F5F5F5]"
               style={{ width: "410px", height: "58px" }}
             />
+            {errors.password?.message && <div className="text-xs text-destructive mt-1">{errors.password.message}</div>}
           </div>
 
           <div className="flex space-x-4">
@@ -70,7 +98,8 @@ function LoginPage() {
                 checked={role === "admin"}
                 onChange={() => {
                   setRole("admin");
-                  setEmail("admin@canteen.com");
+                  setValue("email", "admin@example.com");
+                  setValue("password", "admin123");
                 }}
                 className="w-4 h-4"
               />
@@ -83,7 +112,8 @@ function LoginPage() {
                 checked={role === "salesman"}
                 onChange={() => {
                   setRole("salesman");
-                  setEmail("rahim@canteen.com");
+                  setValue("email", "salesman1@example.com");
+                  setValue("password", "salesman123");
                 }}
                 className="w-4 h-4"
               />
@@ -95,8 +125,9 @@ function LoginPage() {
             type="submit"
             className="w-full bg-black text-white hover:bg-gray-800"
             style={{ width: "410px", height: "58px", borderRadius: "12px" }}
+            disabled={isSubmitting || login.isPending}
           >
-            Login
+            {login.isPending ? "Logging in..." : "Login"}
           </Button>
 
           {/* <div className="text-xs text-gray-600 mt-4 p-3 bg-gray-100 rounded-lg">

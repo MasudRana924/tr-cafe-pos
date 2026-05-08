@@ -1,13 +1,12 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { LayoutDashboard, Package, Boxes, Receipt, BarChart3, Users } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
-import { store } from "@/lib/store";
+import { ensureAuthed } from "@/lib/requireAuth";
 
 export const Route = createFileRoute("/admin")({
-  beforeLoad: () => {
-    const u = store.get().user;
-    if (!u) throw redirect({ to: "/login" });
-    if (u.role !== "admin") throw redirect({ to: "/pos" });
+  beforeLoad: async () => {
+    const res = await ensureAuthed("admin");
+    if (!res.ok) throw redirect({ to: res.user ? "/pos" : "/login" });
   },
   component: AdminLayout,
 });
@@ -22,6 +21,7 @@ function AdminLayout() {
         { to: "/admin/inventory", label: "Inventory", icon: <Boxes className="w-5 h-5" /> },
         { to: "/admin/orders", label: "Orders", icon: <Receipt className="w-5 h-5" /> },
         { to: "/admin/reports", label: "Sales Reports", icon: <BarChart3 className="w-5 h-5" /> },
+        { to: "/sales-report", label: "Seller Sales", icon: <BarChart3 className="w-5 h-5" /> },
         { to: "/admin/users", label: "Users", icon: <Users className="w-5 h-5" /> },
       ]}
     >

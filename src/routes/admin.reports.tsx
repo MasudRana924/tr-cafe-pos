@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useStore } from "@/lib/store";
 import { useMemo } from "react";
 import {
   Bar,
@@ -13,6 +12,8 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { useOrdersQuery } from "@/hooks/useOrders";
+import { useSalesHistoryQuery, useSummaryQuery } from "@/hooks/useReports";
 
 export const Route = createFileRoute("/admin/reports")({
   component: ReportsPage,
@@ -21,15 +22,18 @@ export const Route = createFileRoute("/admin/reports")({
 const COLORS = ["var(--chart-1)", "var(--chart-2)", "var(--chart-3)", "var(--chart-4)", "var(--chart-5)"];
 
 function ReportsPage() {
-  const orders = useStore((s) => s.orders);
+  const { data: summary } = useSummaryQuery({ refetchOnMount: "always" });
+  const { data: salesHistory } = useSalesHistoryQuery({ refetchOnMount: "always" });
+  const { data: orders = [] } = useOrdersQuery({ refetchOnMount: "always" });
+
   const monthly = useMemo(() => {
-    const map = new Map<string, number>();
-    orders.forEach((o) => {
-      const k = new Date(o.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" });
-      map.set(k, (map.get(k) ?? 0) + o.total);
-    });
-    return Array.from(map, ([date, sales]) => ({ date, sales })).reverse();
-  }, [orders]);
+    const rows = Array.isArray(salesHistory) ? salesHistory : [];
+    if (!rows.length) return [];
+    return rows.map((r: any) => ({
+      date: new Date(r.date).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+      sales: Number(r.sales ?? 0),
+    }));
+  }, [salesHistory]);
 
   const byPayment = useMemo(() => {
     const map = new Map<string, number>();
@@ -48,8 +52,8 @@ function ReportsPage() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Stat label="Total Revenue" value={`৳${totalRevenue.toLocaleString()}`} />
-        <Stat label="Total Orders" value={orders.length.toString()} />
+        <Stat label="Total Revenue" value={`৳${Number((summary as any)?.total_sales ?? totalRevenue).toLocaleString()}`} />
+        <Stat label="Total Orders" value={String((summary as any)?.total_orders ?? orders.length)} />
         <Stat label="Avg. Order" value={`৳${avgOrder}`} />
       </div>
 

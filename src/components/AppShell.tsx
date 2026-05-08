@@ -1,7 +1,7 @@
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import { LogOut, Menu, X } from "lucide-react";
 import { useState, type ReactNode } from "react";
-import { store, useStore } from "@/lib/store";
+import { authStore, useAuthStore } from "@/lib/authStore";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -16,13 +16,13 @@ export function AppShell({
   title: string;
   children: ReactNode;
 }) {
-  const user = useStore((s) => s.user);
+  const user = useAuthStore((s) => s.user);
   const path = useRouterState({ select: (r) => r.location.pathname });
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
   const logout = () => {
-    store.logout();
+    authStore.logout();
     navigate({ to: "/login" });
   };
 

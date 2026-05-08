@@ -1,11 +1,11 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { store } from "@/lib/store";
+import { ensureAuthed } from "@/lib/requireAuth";
 
 export const Route = createFileRoute("/")({
-  beforeLoad: () => {
-    const u = store.get().user;
-    if (!u) throw redirect({ to: "/login" });
-    if (u.role === "admin") throw redirect({ to: "/admin" });
+  beforeLoad: async () => {
+    const res = await ensureAuthed();
+    if (!res.ok) throw redirect({ to: "/login" });
+    if (res.user?.role === "admin") throw redirect({ to: "/admin" });
     throw redirect({ to: "/pos" });
   },
   component: () => null,

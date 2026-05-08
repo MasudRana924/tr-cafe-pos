@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from "./routes/__root"
+import { Route as SalesReportRouteImport } from "./routes/sales-report"
 import { Route as PosRouteImport } from "./routes/pos"
 import { Route as LoginRouteImport } from "./routes/login"
 import { Route as AdminRouteImport } from "./routes/admin"
@@ -24,6 +25,11 @@ import { Route as AdminOrdersRouteImport } from "./routes/admin.orders"
 import { Route as AdminInventoryRouteImport } from "./routes/admin.inventory"
 import { Route as PosOrderIdRouteImport } from "./routes/pos.order.$id"
 
+const SalesReportRoute = SalesReportRouteImport.update({
+  id: "/sales-report",
+  path: "/sales-report",
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PosRoute = PosRouteImport.update({
   id: "/pos",
   path: "/pos",
@@ -100,6 +106,7 @@ export interface FileRoutesByFullPath {
   "/admin": typeof AdminRouteWithChildren
   "/login": typeof LoginRoute
   "/pos": typeof PosRouteWithChildren
+  "/sales-report": typeof SalesReportRoute
   "/admin/inventory": typeof AdminInventoryRoute
   "/admin/orders": typeof AdminOrdersRoute
   "/admin/products": typeof AdminProductsRoute
@@ -114,6 +121,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   "/": typeof IndexRoute
   "/login": typeof LoginRoute
+  "/sales-report": typeof SalesReportRoute
   "/admin/inventory": typeof AdminInventoryRoute
   "/admin/orders": typeof AdminOrdersRoute
   "/admin/products": typeof AdminProductsRoute
@@ -131,6 +139,7 @@ export interface FileRoutesById {
   "/admin": typeof AdminRouteWithChildren
   "/login": typeof LoginRoute
   "/pos": typeof PosRouteWithChildren
+  "/sales-report": typeof SalesReportRoute
   "/admin/inventory": typeof AdminInventoryRoute
   "/admin/orders": typeof AdminOrdersRoute
   "/admin/products": typeof AdminProductsRoute
@@ -149,6 +158,7 @@ export interface FileRouteTypes {
     | "/admin"
     | "/login"
     | "/pos"
+    | "/sales-report"
     | "/admin/inventory"
     | "/admin/orders"
     | "/admin/products"
@@ -163,6 +173,7 @@ export interface FileRouteTypes {
   to:
     | "/"
     | "/login"
+    | "/sales-report"
     | "/admin/inventory"
     | "/admin/orders"
     | "/admin/products"
@@ -179,6 +190,7 @@ export interface FileRouteTypes {
     | "/admin"
     | "/login"
     | "/pos"
+    | "/sales-report"
     | "/admin/inventory"
     | "/admin/orders"
     | "/admin/products"
@@ -196,10 +208,18 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   LoginRoute: typeof LoginRoute
   PosRoute: typeof PosRouteWithChildren
+  SalesReportRoute: typeof SalesReportRoute
 }
 
 declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
+    "/sales-report": {
+      id: "/sales-report"
+      path: "/sales-report"
+      fullPath: "/sales-report"
+      preLoaderRoute: typeof SalesReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     "/pos": {
       id: "/pos"
       path: "/pos"
@@ -342,6 +362,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   LoginRoute: LoginRoute,
   PosRoute: PosRouteWithChildren,
+  SalesReportRoute: SalesReportRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

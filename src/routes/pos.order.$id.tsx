@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { CheckCircle2, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useStore } from "@/lib/store";
+import { useOrderQuery } from "@/hooks/useOrders";
 
 export const Route = createFileRoute("/pos/order/$id")({
   component: OrderConfirmation,
@@ -9,7 +9,7 @@ export const Route = createFileRoute("/pos/order/$id")({
 
 function OrderConfirmation() {
   const { id } = useParams({ from: "/pos/order/$id" });
-  const order = useStore((s) => s.orders.find((o) => o.id === id));
+  const { data: order } = useOrderQuery(id, Boolean(id));
 
   if (!order) {
     return (
