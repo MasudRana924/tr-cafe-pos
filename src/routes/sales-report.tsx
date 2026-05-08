@@ -149,7 +149,7 @@ function SalesReportPage() {
                   })
                 }
               >
-                <SelectTrigger className="h-11 w-full shadow-none bg-background">
+                <SelectTrigger className="h-11 w-full shadow-none bg-background" style={{ backgroundColor: '#F5F5F5', border: '1px solid #F5F5F5', boxShadow: 'none' }}>
                   <SelectValue placeholder="Choose a salesman" />
                 </SelectTrigger>
                 <SelectContent>
@@ -171,17 +171,10 @@ function SalesReportPage() {
         )}
       </div>
 
-          {isAdmin && !cardsEnabled && !salesmenQ.isLoading && (
-            <div className="rounded-xl border border-dashed border-muted-foreground/40 bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
-              {salesmen.length === 0
-                ? "No salespeople yet. Add one under Users."
-                : "Select a salesman above to load summary cards and their order list."}
-            </div>
-          )}
-
+          
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
             {stats.map((s) => (
-              <div key={s.label} className="card-soft p-5">
+              <div key={s.label} className={`${s.bgColor} p-5 rounded-xl border ${s.borderColor}`}>
                 <div className="text-sm text-muted-foreground">{s.label}</div>
                 {cardsEnabled && cardsQ.isLoading ? (
                   <Skeleton className="h-8 w-32 mt-2" />
@@ -192,7 +185,7 @@ function SalesReportPage() {
             ))}
           </div>
 
-          <div className="card-soft p-5">
+          <div className="p-5">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="font-display font-semibold text-lg">Total sales list (orders)</h3>
@@ -202,7 +195,7 @@ function SalesReportPage() {
 
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
-            <thead>
+            <thead className="bg-gray-100">
               <tr className="border-b">
                 <th className="text-left p-3 font-semibold">Order ID</th>
                 <th className="text-left p-3 font-semibold">Date & Time</th>

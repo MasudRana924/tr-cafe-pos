@@ -24,9 +24,9 @@ export function OrdersList({ orders, pending }: { orders: Order[]; pending?: boo
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search by order ID..." className="pl-9" style={{ width: "510px", height: "50px", borderRadius: "16px", backgroundColor: "#F5F5F5", border: "1px solid #F5F5F5", boxShadow: "none" }} />
         </div>
-        <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="sm:w-44 h-11" />
+        <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="sm:w-44 h-[50px] rounded-lg" style={{ backgroundColor: '#F5F5F5', border: '1px solid #F5F5F5', boxShadow: 'none' }} />
         <Select value={pay} onValueChange={setPay}>
-          <SelectTrigger className="sm:w-44 h-11"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="sm:w-44 h-[50px] rounded-lg" style={{ backgroundColor: '#F5F5F5', border: '1px solid #F5F5F5', boxShadow: 'none' }}><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All payments</SelectItem>
             <SelectItem value="Cash">Cash</SelectItem>
@@ -38,7 +38,7 @@ export function OrdersList({ orders, pending }: { orders: Order[]; pending?: boo
 
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
-          <thead>
+          <thead className="bg-gray-100">
             <tr className="border-b">
               <th className="text-left p-3 font-semibold">Order ID</th>
               <th className="text-left p-3 font-semibold">Date & Time</th>

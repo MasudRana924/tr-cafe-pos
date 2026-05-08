@@ -104,11 +104,11 @@ function ProductsPage() {
             }}
             placeholder="Search products..."
             className="pl-9"
-            style={{ width: "510px", height: "50px", borderRadius: "16px", backgroundColor: "#F5F5F5", border: "1px solid #F5F5F5", boxShadow: "none" }}
+            style={{ width: "510px", height: "50px", borderRadius: "16px", backgroundColor: "#F5F5F5", border: "1px solid #F5F5F5", boxShadow: "none", color: '#797979' }}
           />
         </div>
         <Select value={cat} onValueChange={setCat}>
-          <SelectTrigger className="sm:w-56" style={{ height: "50px" }}><SelectValue /></SelectTrigger>
+          <SelectTrigger className="sm:w-56 h-[50px] rounded-lg" style={{ backgroundColor: '#F5F5F5', border: '1px solid #F5F5F5', boxShadow: 'none' }}><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All categories</SelectItem>
             {categories.map((c: any) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
@@ -118,7 +118,7 @@ function ProductsPage() {
 
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
-          <thead>
+          <thead className="bg-gray-100">
             <tr className="border-b">
               <th className="text-left p-3 font-semibold">Icon</th>
               <th className="text-left p-3 font-semibold">Name</th>
@@ -328,11 +328,13 @@ function ProductDialog({ open, onOpenChange, editing }: { open: boolean; onOpenC
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) reset(); onOpenChange(v); }}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>{editing ? "Edit Product" : "New Product"}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+         
+
           <div>
             <Label className="mb-2 block">Image</Label>
 
@@ -365,36 +367,38 @@ function ProductDialog({ open, onOpenChange, editing }: { open: boolean; onOpenC
             </div>
 
           </div>
-          <div>
+ <div>
             <Label className="mb-2 block">Name</Label>
-            <Input {...register("name")} className="w-full h-[58px] px-4 rounded-[12px] border border-[#E5E7EB] bg-white focus:outline-none focus:border-[#E5E7EB] shadow-none" />
+            <Input {...register("name")} className="w-full h-[58px] px-4 rounded-[12px] border border-[#E5E7EB] bg-white focus:outline-none focus:border-[#E5E7EB] shadow-none" style={{ backgroundColor: '#F5F5F5', border: '1px solid #F5F5F5', boxShadow: 'none', color: '#797979' }} />
             {errors.name?.message && <div className="text-xs text-destructive mt-1">{errors.name.message}</div>}
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-3 gap-4">
             <div>
-              <Label className="mb-2 block">Price (৳)</Label>
-              <Input type="number" {...register("price")} className="w-full h-[58px] px-4 rounded-[12px] border border-[#E5E7EB] bg-white focus:outline-none focus:border-[#E5E7EB] shadow-none" />
+              <Label className="mb-2 block">Price</Label>
+              <Input type="number" {...register("price", { valueAsNumber: true })} className="w-full h-[58px] px-4 rounded-[12px] border border-[#E5E7EB] bg-white focus:outline-none focus:border-[#E5E7EB] shadow-none" style={{ color: '#797979' }} />
               {errors.price?.message && <div className="text-xs text-destructive mt-1">{errors.price.message}</div>}
             </div>
             <div>
               <Label className="mb-2 block">Quantity</Label>
-              <Input type="number" {...register("quantity")} className="w-full h-[58px] px-4 rounded-[12px] border border-[#E5E7EB] bg-white focus:outline-none focus:border-[#E5E7EB] shadow-none" />
+              <Input type="number" {...register("quantity")} className="w-full h-[58px] px-4 rounded-[12px] border border-[#E5E7EB] bg-white focus:outline-none focus:border-[#E5E7EB] shadow-none" style={{ color: '#797979' }} />
               {errors.quantity?.message && <div className="text-xs text-destructive mt-1">{errors.quantity.message}</div>}
             </div>
+            <div>
+              <Label className="mb-2 block">Category</Label>
+              <Select value={category} onValueChange={(v) => setValue("category", v)}>
+                <SelectTrigger className="w-full h-[58px] px-4 rounded-[12px] border border-[#E5E7EB] bg-white focus:outline-none focus:border-[#E5E7EB] shadow-none" style={{ backgroundColor: '#F5F5F5', border: '1px solid #F5F5F5', boxShadow: 'none', color: '#797979' }}><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All categories</SelectItem>
+                  {["Fast Food", "Beverages", "Desserts"].map((c: any) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                </SelectContent>
+              </Select>
+              {errors.category?.message && <div className="text-xs text-destructive mt-1">{errors.category.message}</div>}
+            </div>
           </div>
-          <div>
-            <Label className="mb-2 block">Category</Label>
-            <Select value={category} onValueChange={(v) => setValue("category", v)}>
-              <SelectTrigger className="w-full h-[58px] px-4 rounded-[12px] border border-[#E5E7EB] bg-white focus:outline-none focus:border-[#E5E7EB] shadow-none"><SelectValue /></SelectTrigger>
-              <SelectContent>
-                {["Fast Food","Snacks","Beverages","Desserts"].map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-              </SelectContent>
-            </Select>
-            {errors.category?.message && <div className="text-xs text-destructive mt-1">{errors.category.message}</div>}
-          </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)} className="shadow-none">Cancel</Button>
-          <Button type="submit" className="bg-black text-white hover:bg-black/90 shadow-none">
+
+          <DialogFooter>
+          <Button variant="outline" onClick={() => onOpenChange(false)} className="shadow-none" style={{ width: '150px' }}>Cancel</Button>
+          <Button type="submit" className="bg-black text-white hover:bg-black/90 shadow-none" style={{ width: '150px' }}>
             {editing ? "Save changes" : "Create"}
           </Button>
         </DialogFooter>

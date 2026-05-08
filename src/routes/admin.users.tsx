@@ -125,39 +125,44 @@ function UsersPage() {
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-lg">
           <DialogHeader><DialogTitle>New User</DialogTitle></DialogHeader>
           <form onSubmit={handleSubmit(submit)} className="space-y-4">
-            <div>
-              <Label className="mb-2 block">Name</Label>
-              <Input {...register("name")} className="w-full h-[58px] px-4 rounded-[12px] border border-[#E5E7EB] bg-white focus:outline-none focus:border-[#E5E7EB] shadow-none" />
-              {errors.name?.message && <div className="text-xs text-destructive mt-1">{errors.name.message}</div>}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label className="mb-2 block">Name</Label>
+                <Input {...register("name")} className="w-full h-[58px] px-4 rounded-[12px] border border-[#E5E7EB] bg-white focus:outline-none focus:border-[#E5E7EB] shadow-none" style={{ backgroundColor: '#F5F5F5', border: '1px solid #F5F5F5', boxShadow: 'none' }} />
+                {errors.name?.message && <div className="text-xs text-destructive mt-1">{errors.name.message}</div>}
+              </div>
+              <div>
+                <Label className="mb-2 block">Email</Label>
+                <Input type="email" {...register("email")} className="w-full h-[58px] px-4 rounded-[12px] border border-[#E5E7EB] bg-white focus:outline-none focus:border-[#E5E7EB] shadow-none" style={{ backgroundColor: '#F5F5F5', border: '1px solid #F5F5F5', boxShadow: 'none' }} />
+                {errors.email?.message && <div className="text-xs text-destructive mt-1">{errors.email.message}</div>}
+              </div>
             </div>
-            <div>
-              <Label className="mb-2 block">Email</Label>
-              <Input type="email" {...register("email")} className="w-full h-[58px] px-4 rounded-[12px] border border-[#E5E7EB] bg-white focus:outline-none focus:border-[#E5E7EB] shadow-none" />
-              {errors.email?.message && <div className="text-xs text-destructive mt-1">{errors.email.message}</div>}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label className="mb-2 block">Password</Label>
+                <Input type="password" {...register("password")} className="w-full h-[58px] px-4 rounded-[12px] border border-[#E5E7EB] bg-white focus:outline-none focus:border-[#E5E7EB] shadow-none" style={{ backgroundColor: '#F5F5F5', border: '1px solid #F5F5F5', boxShadow: 'none' }} />
+                {errors.password?.message && <div className="text-xs text-destructive mt-1">{errors.password.message}</div>}
+              </div>
+              <div>
+                <Label className="mb-2 block">Role</Label>
+                <Select value={watch("role")} onValueChange={(v) => setValue("role", v as Role)}>
+                  <SelectTrigger className="w-full h-[58px] px-4 rounded-[12px] border border-[#E5E7EB] bg-white focus:outline-none focus:border-[#E5E7EB] shadow-none" style={{ backgroundColor: '#F5F5F5', border: '1px solid #F5F5F5', boxShadow: 'none' }}><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="salesman">Salesman</SelectItem>
+                  </SelectContent>
+                </Select>
+                {errors.role?.message && <div className="text-xs text-destructive mt-1">{errors.role.message}</div>}
+              </div>
             </div>
-            <div>
-              <Label className="mb-2 block">Password</Label>
-              <Input type="password" {...register("password")} className="w-full h-[58px] px-4 rounded-[12px] border border-[#E5E7EB] bg-white focus:outline-none focus:border-[#E5E7EB] shadow-none" />
-              {errors.password?.message && <div className="text-xs text-destructive mt-1">{errors.password.message}</div>}
-            </div>
-            <div>
-              <Label className="mb-2 block">Role</Label>
-              <Select value={watch("role")} onValueChange={(v) => setValue("role", v as Role)}>
-                <SelectTrigger className="w-full h-[58px] px-4 rounded-[12px] border border-[#E5E7EB] bg-white focus:outline-none focus:border-[#E5E7EB] shadow-none"><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="salesman">Salesman</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setOpen(false)} className="shadow-none">Cancel</Button>
-            <Button type="submit" className="bg-black text-white hover:bg-black/90 shadow-none" disabled={createSalesman.isPending}>
-              {createSalesman.isPending ? "Creating..." : "Create"}
-            </Button>
-          </DialogFooter>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setOpen(false)} className="shadow-none" style={{ width: '150px' }}>Cancel</Button>
+              <Button type="submit" className="bg-black text-white hover:bg-black/90 shadow-none" style={{ width: '150px' }} disabled={createSalesman.isPending}>
+                {createSalesman.isPending ? "Creating..." : "Create"}
+              </Button>
+            </DialogFooter>
           </form>
         </DialogContent>
       </Dialog>

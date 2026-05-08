@@ -75,7 +75,7 @@ function OrdersPage() {
           />
         </div>
         <Select value={pay} onValueChange={setPay}>
-          <SelectTrigger className="sm:w-56" style={{ height: "50px" }}><SelectValue /></SelectTrigger>
+          <SelectTrigger className="sm:w-56 h-[50px] rounded-lg" style={{ backgroundColor: '#F5F5F5', border: '1px solid #F5F5F5', boxShadow: 'none' }}><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All payments</SelectItem>
             <SelectItem value="Cash">Cash</SelectItem>
@@ -87,7 +87,7 @@ function OrdersPage() {
 
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
-          <thead>
+          <thead className="bg-gray-100">
             <tr className="border-b">
               <th className="text-left p-3 font-semibold">Order ID</th>
               <th className="text-left p-3 font-semibold">Date & Time</th>

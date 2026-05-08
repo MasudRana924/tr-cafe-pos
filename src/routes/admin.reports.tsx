@@ -52,9 +52,9 @@ function ReportsPage() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Stat label="Total Revenue" value={`৳${Number((summary as any)?.total_sales ?? totalRevenue).toLocaleString()}`} />
-        <Stat label="Total Orders" value={String((summary as any)?.total_orders ?? orders.length)} />
-        <Stat label="Avg. Order" value={`৳${avgOrder}`} />
+        <Stat label="Total Revenue" value={`৳${Number((summary as any)?.total_sales ?? totalRevenue).toLocaleString()}`} bgColor="bg-blue-50" borderColor="border-blue-200" />
+        <Stat label="Total Orders" value={String((summary as any)?.total_orders ?? orders.length)} bgColor="bg-green-50" borderColor="border-green-200" />
+        <Stat label="Avg. Order" value={`৳${avgOrder}`} bgColor="bg-purple-50" borderColor="border-purple-200" />
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
@@ -102,9 +102,9 @@ function ReportsPage() {
   );
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
+function Stat({ label, value, bgColor, borderColor }: { label: string; value: string; bgColor?: string; borderColor?: string }) {
   return (
-    <div className="card-soft p-5">
+    <div className={`${bgColor} p-5 rounded-xl border ${borderColor}`}>
       <div className="text-sm text-muted-foreground">{label}</div>
       <div className="font-display text-3xl font-bold mt-1">{value}</div>
     </div>
