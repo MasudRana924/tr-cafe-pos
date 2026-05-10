@@ -40,8 +40,8 @@ export function PosCartSection({
 
   return (
     <aside
-      className="bg-white border border-gray-200 rounded-xl p-5 xl:sticky xl:top-6 self-start max-h-[calc(100vh-3rem)] flex flex-col shadow-sm"
-      style={{ backgroundColor: "white" }}
+      className="bg-[#F6F6F6] rounded-xl p-5 xl:sticky xl:top-6 self-start max-h-[calc(100vh-3rem)] flex flex-col"
+
     >
       <div className="flex items-center gap-2 mb-4">
         <ShoppingBag className="w-5 h-5 text-primary" />
@@ -58,7 +58,7 @@ export function PosCartSection({
         )}
         {cartLines.map((it) => (
           <div key={it.id} className="flex items-center gap-3 p-2 rounded-xl hover:bg-muted/50">
-            <div className="w-12 h-12 rounded-lg bg-accent overflow-hidden grid place-items-center">
+            <div className="w-12 h-12  overflow-hidden grid place-items-center">
               {it.image_url ? (
                 isEmoji(it.image_url) ? (
                   <div className="text-2xl">{it.image_url}</div>
@@ -95,7 +95,7 @@ export function PosCartSection({
         <div className="border-t pt-4 mt-3 space-y-3">
           <div>
             <Label className="text-xs mb-1.5 block">Discount (৳)</Label>
-            <Input type="number" value={discount || ""} onChange={(e) => onDiscountChange(Number(e.target.value) || 0)} className="h-10" />
+            <Input type="number" value={discount || ""} onChange={(e) => onDiscountChange(Number(e.target.value) || 0)} className="h-10 bg-white" />
           </div>
           <div>
             <Label className="text-xs mb-1.5 block">Payment Method</Label>
@@ -107,7 +107,7 @@ export function PosCartSection({
                   onClick={() => onPaymentChange(m)}
                   className={cn(
                     "py-2 rounded-lg text-sm font-medium border transition-all",
-                    payment === m ? "bg-primary text-primary-foreground border-primary" : "bg-card border-border hover:border-primary/40",
+                    payment === m ? "bg-[#130F26] text-primary-foreground border-primary" : "bg-card border-border hover:border-primary/40",
                   )}
                 >
                   {m}
@@ -134,9 +134,9 @@ export function PosCartSection({
             onClick={onCheckout}
             className="w-full h-11 gradient-primary text-primary-foreground hover-lift border-0"
             loading={checkoutPending}
-            loadingText="Charging..."
+            loadingText="In progress..."
           >
-            {`Charge ৳${total}`}
+            Continue
           </LoadingButton>
         </div>
       )}

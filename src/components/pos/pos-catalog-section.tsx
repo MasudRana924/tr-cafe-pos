@@ -36,7 +36,7 @@ export function PosCatalogSection({
   const filtered = products.filter((p) => activeCategory === "All" || p.category === activeCategory);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 max-h-[calc(100vh-3rem)] overflow-y-auto">
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
@@ -50,15 +50,14 @@ export function PosCatalogSection({
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 mb-4">
         {categories.map((c) => (
           <button
-            key={c}
             type="button"
             onClick={() => onCategoryChange(c)}
             className={cn(
               "px-4 py-2 rounded-full text-sm font-medium border transition-all",
-              activeCategory === c ? "bg-primary text-primary-foreground border-primary shadow-sm" : "bg-card border-border hover:border-primary/40",
+              activeCategory === c ? "bg-[#1a1a1a] text-primary-foreground border-primary shadow-sm" : "bg-card border-border hover:border-primary/40",
             )}
           >
             {c}
@@ -110,7 +109,7 @@ export function PosCatalogSection({
                   <span className={`text-xs ${p.quantity <= 10 ? "text-destructive" : "text-muted-foreground"}`}>{p.quantity}</span>
                 </div>
                 <div className="absolute top-2 right-2">
-                  <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full grid place-items-center shadow-lg">
+                  <div className="w-8 h-8 bg-[#1a1a1a] text-primary-foreground rounded-full grid place-items-center shadow-lg">
                     <ShoppingCart className="w-4 h-4" />
                   </div>
                 </div>

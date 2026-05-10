@@ -26,7 +26,7 @@ function extractMessage(data: unknown, fallback: string) {
 }
 
 function getBaseUrl() {
-  return (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? "http://localhost:5000";
+  return (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? "https://pos-service-tnjq.onrender.com";
 }
 
 type RequestOptions = {

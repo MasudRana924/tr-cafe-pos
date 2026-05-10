@@ -41,7 +41,7 @@ export function AppShell({
               H
             </div>
             <div>
-              <div className="font-display font-bold text-base leading-tight">Hall Canteen</div>
+              <div className="font-display font-bold text-base leading-tight">TR Cafe</div>
               <div className="text-xs text-muted-foreground">{title}</div>
             </div>
           </div>
@@ -95,7 +95,7 @@ export function AppShell({
           <Button variant="ghost" size="icon" onClick={() => setOpen((v) => !v)}>
             {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </Button>
-          <span className="font-display font-semibold">Hall Canteen POS</span>
+          <span className="font-display font-semibold">TR Cafe POS</span>
         </header>
         <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1500px] w-full mx-auto animate-fade-in overflow-y-auto">
           {children}
